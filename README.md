@@ -16,3 +16,10 @@ docker run -d --name pg-backup \
   -v /mnt/smb-backup:/backup \
   postgres-backup
 ```
+
+#### Some Notes
+Obviously there are many ways to come at backups and this is very simple one. A slightly more complex version could have you backing up the database to somewhere else on your network. In this case you would create the share first on the host system and then use that mount for the container volume:
+```
+sudo mount -t cifs //LAN_IP_ADDRESS/share_name /mnt/smb-backup \
+  -o username=your_username,password=your_password,uid=1000,gid=1000
+```
