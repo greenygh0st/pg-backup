@@ -1,5 +1,5 @@
 # PG Backup Docker Daemon
-A simple docker image to handle the backups for your PG database.
+A simple docker image to handle the backups for your PG database. Note backups older than 7 days are automatically removed by the backup daemon.
 
 ## Basic Usage
 ```
