@@ -23,3 +23,26 @@ Obviously there are many ways to come at backups and this is very simple one. A 
 sudo mount -t cifs //LAN_IP_ADDRESS/share_name /mnt/smb-backup \
   -o username=your_username,password=your_password,uid=1000,gid=1000
 ```
+
+If you want to do this more permanently you can follow these steps:
+
+Create a credentials file
+```
+sudo nano /etc/smbcredentials
+```
+
+Add your credentials
+```
+username=your_username
+password=your_password
+```
+
+Secure it
+```
+sudo chmod 600 /etc/smbcredentials
+```
+
+Modify the /etc/fstab entry to reference the credentials file:
+```
+//LAN_IP_ADDRESS/share_name /mnt/smb-backup cifs credentials=/etc/smbcredentials,uid=1000,gid=1000 0 0
+```
