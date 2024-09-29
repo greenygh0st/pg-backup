@@ -26,5 +26,8 @@ RUN chmod +x /usr/local/bin/backup_pg.sh
 # RUN echo "0 2 * * * /usr/local/bin/backup_pg.sh > /proc/1/fd/1 2>&1" > /etc/crontabs/root
 RUN echo "0 2 * * * /usr/local/bin/backup_pg.sh > /proc/1/fd/1 2>&1" | crontab -
 
+# run the script once to create the initial backup
+RUN /usr/local/bin/backup_pg.sh
+
 # Start cron in the foreground
 CMD ["cron", "-f"]
