@@ -26,6 +26,7 @@ sudo apt-get update
 sudo apt-get install cifs-utils
 ```
 
+Mount the share
 ```
 sudo mount -t cifs //LAN_IP_ADDRESS/share_name /mnt/smb-backup \
   -o username=your_username,password=your_password,uid=1000,gid=1000
