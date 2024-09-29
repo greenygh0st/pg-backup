@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main  # This will trigger the workflow on push to the main branch.
+    tags:
+      - v*
 
 jobs:
   build:
