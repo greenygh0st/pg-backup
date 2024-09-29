@@ -1,5 +1,6 @@
 # Use an appropriate base image with pg_dump installed
-FROM postgres:14-alpine
+# was alpine
+FROM postgres:14-alpine 
 
 # Set environment variables (optional, depending on how you handle credentials)
 ENV PGUSER=your_db_user \
