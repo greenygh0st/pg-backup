@@ -5,7 +5,8 @@ FROM postgres:14
 ENV PGUSER=your_db_user \
     PGDATABASE=your_database_name \
     PGPASSWORD=your_db_password \
-    PGHOST=your_db_host
+    PGHOST=your_db_host \
+    KEEPBACKUP=7
 
 # Install necessary packages including cron and bash
 # RUN apk add --no-cache bash dcron
