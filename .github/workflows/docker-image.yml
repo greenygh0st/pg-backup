@@ -19,9 +19,33 @@ jobs:
     - name: Build and tag Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/pg-backup:${{ github.sha }} .
+
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+        # Strip "v" prefix from tag name
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+        # Use Docker `latest` tag convention
+        [ "$VERSION" == "master" ] && VERSION=latest
+
+        echo VERSION=$VERSION
+        
         docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/pg-backup:${{ github.sha }} ${{ secrets.DOCKER_HUB_USERNAME }}/pg-backup:latest
 
     - name: Push Docker image to Docker Hub
       run: |
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pg-backup:${{ github.sha }}
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pg-backup:latest
+
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+        # Strip "v" prefix from tag name
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+        # Use Docker `latest` tag convention
+        [ "$VERSION" == "master" ] && VERSION=latest
+
+        echo VERSION=$VERSION
+                
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pg-backup:$VERSION
