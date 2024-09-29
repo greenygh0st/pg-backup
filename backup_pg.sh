@@ -8,6 +8,9 @@ FILENAME="$BACKUP_DIR/$PGDATABASE-backup-$DATE.sql"
 # Create backup directory if it doesn't exist
 mkdir -p $BACKUP_DIR
 
+# echo command to be run
+echo "pg_dump -h $PGHOST -F c -b -v -f $FILENAME $PGDATABASE"
+
 # Perform database backup
 pg_dump -h $PGHOST -F c -b -v -f $FILENAME $PGDATABASE
 
