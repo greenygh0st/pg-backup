@@ -4,4 +4,4 @@
 printenv > /etc/environment
 
 # Start cron
-crond -f
+cron -f
