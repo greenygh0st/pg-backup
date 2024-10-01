@@ -8,7 +8,7 @@ ENV PGUSER=your_db_user \
     PGHOST=your_db_host \
     KEEPBACKUP=7
     
-ENV CRONTIME = 0 2 * * *
+ENV CRONTIME=${CRONTIME:-"0 2 * * *"}
 
 # Install necessary packages including cron and bash
 # RUN apk add --no-cache bash dcron
