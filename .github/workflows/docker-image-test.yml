@@ -65,7 +65,7 @@ jobs:
             pg_backup_image
 
           echo "Waiting for cron job to run..."
-          sleep 60  # Wait for 1 minute to allow the cron job to execute
+          sleep 120  # Wait for 2 minutes to allow the cron job to execute
 
       - name: Verify Backup
         run: |
