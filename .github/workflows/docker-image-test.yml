@@ -64,7 +64,7 @@ jobs:
             -e CRONTIME="${CRONTIME}" \
             pg_backup_image
 
-          echo "Waiting for cron job to run..."
+          echo "Waiting 2 minutes for cron job to run..."
           sleep 120  # Wait for 2 minutes to allow the cron job to execute
 
       - name: Verify Backup
@@ -72,6 +72,7 @@ jobs:
           echo "Verifying backup..."
           # Check if the backup file exists
           BACKUP_FILE=$(docker run --rm pg_backup_image ls /backup | head -n 1)
+          echo "Found backup file: $BACKUP_FILE"  # Log the found file name
           if [ -z "$BACKUP_FILE" ]; then
             echo "No backup file found!"
             exit 1
