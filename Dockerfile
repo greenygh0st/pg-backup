@@ -6,9 +6,8 @@ ENV PGUSER=your_db_user \
     PGDATABASE=your_database_name \
     PGPASSWORD=your_db_password \
     PGHOST=your_db_host \
-    KEEPBACKUP=7
-    
-ENV CRONTIME=${CRONTIME:-"0 2 * * *"}
+    KEEPBACKUP=7 \
+    CRONTIME="0 2 * * *"
 
 # Install necessary packages including cron and bash
 # RUN apk add --no-cache bash dcron
@@ -31,13 +30,6 @@ COPY ./run_with_env.sh /usr/local/bin/run_with_env.sh
 
 # Set permissions for the backup script
 RUN chmod +x /usr/local/bin/backup_pg.sh /usr/local/bin/run_with_env.sh
-
-# Set up a cron job to run the backup 
-# default is daily at 2 AM -- 0 2 * * *
-RUN echo "$CRONTIME /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" | crontab -
-
-# Make sure cron can read the crontab file
-RUN chmod 600 /var/spool/cron/crontabs/root
 
 # Start the wrapper script that sets up the environment for cron
 CMD ["/usr/local/bin/run_with_env.sh"]
