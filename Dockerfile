@@ -12,7 +12,7 @@ ENV PGUSER=your_db_user \
 # RUN apk add --no-cache bash dcron
 
 # Install cron and bash
-RUN apt-get update && apt-get install -y cron && apt-get clean
+RUN apt-get update && apt-get install -y cron procps && apt-get clean
 
 # Create a directory for the backup scripts and backups
 RUN mkdir -p /backup
