@@ -1,0 +1,81 @@
+name: Test Backup Script
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch if needed
+  pull_request:
+    branches:
+      - main  # Change this to your default branch if needed
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: your_db_user
+          POSTGRES_PASSWORD: your_db_password
+          POSTGRES_DB: your_database_name
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U your_db_user" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker Image
+        run: docker build -t pg_backup_image .
+
+      - name: Create Sample Database and Insert Data
+        run: |
+          echo "Creating sample database and inserting data..."
+          until pg_isready -h localhost -U your_db_user; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 5
+          done
+          psql -h localhost -U your_db_user -d your_database_name -c "CREATE TABLE test_table (id SERIAL PRIMARY KEY, name VARCHAR(50));"
+          psql -h localhost -U your_db_user -d your_database_name -c "INSERT INTO test_table (name) VALUES ('Test Data 1'), ('Test Data 2');"
+
+      - name: Set CRONTIME
+        run: echo "CRONTIME='* * * * *'" >> $GITHUB_ENV
+
+      - name: Start Cron Job
+        run: |
+          echo "Setting up cron job..."
+          docker run -d \
+            --name pg_backup_container \
+            -e PGUSER=your_db_user \
+            -e PGDATABASE=your_database_name \
+            -e PGPASSWORD=your_db_password \
+            -e PGHOST=localhost \
+            -e CRONTIME="${CRONTIME}" \
+            pg_backup_image
+
+          echo "Waiting for cron job to run..."
+          sleep 60  # Wait for 1 minute to allow the cron job to execute
+
+      - name: Verify Backup
+        run: |
+          echo "Verifying backup..."
+          # Check if the backup file exists
+          BACKUP_FILE=$(docker run --rm pg_backup_image ls /backup | head -n 1)
+          if [ -z "$BACKUP_FILE" ]; then
+            echo "No backup file found!"
+            exit 1
+          fi
+          echo "Verifying contents of $BACKUP_FILE..."
+          docker run --rm pg_backup_image sh -c "pg_restore -d your_database_name -U your_db_user /backup/$BACKUP_FILE && psql -h localhost -U your_db_user -d your_database_name -c 'SELECT * FROM test_table;'"
+
+          # Optionally, you can use grep to check specific data
+          docker run --rm pg_backup_image sh -c "pg_restore -d your_database_name -U your_db_user /backup/$BACKUP_FILE && psql -h localhost -U your_db_user -d your_database_name -c 'SELECT * FROM test_table;' | grep 'Test Data'"
