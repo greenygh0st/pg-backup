@@ -23,6 +23,7 @@ docker run -d --name pg-backup \
 - `PGDATABASE` - The name of the database to backup
 - `PGHOST` - The host of the database
 - `KEEPBACKUP` - The number of days to keep backups for (default is '7')
+- `CRONTIME` - The time to run the backup (default is '0 2 * * *'/2AM)
 
 ## Volumes
 - `/backup` - The location where the backups will be stored in the container
