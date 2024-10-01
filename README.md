@@ -29,7 +29,7 @@ docker run -d --name pg-backup \
 - `/backup` - The location where the backups will be stored in the container.
 
 ## Backup Daemon
-The backup daemon is a simple bash script that runs every 24 hours. It will create a backup of the database and store it in the `/backup` volume. The backups are stored in the format `dbname_backup_YYYY-MM-DD_HH-MM.sql`.
+The backup daemon is a simple bash script that runs daily by default. It will create a backup of the database and store it in the `/backup` volume. The backups are stored in the format `dbname_backup_YYYY-MM-DD_HH-MM.sql`.
 
 #### Some Notes
 Obviously there are many ways to come at backups and this is very simple one. A slightly more complex version could have you backing up the database to somewhere else on your network. In this case you would create the share first on the host system and then use that mount for the container volume:
