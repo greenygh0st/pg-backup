@@ -37,7 +37,7 @@ RUN echo "0 2 * * * /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" |
 
 
 # run the script once to create the initial backup
-RUN /usr/local/bin/backup_pg.sh
+# RUN /usr/local/bin/backup_pg.sh
 
 # Start cron in the foreground
 CMD ["cron", "-f"]
