@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Source environment variables
+source /etc/environment
+
 # Define backup directory and filename with timestamp
 BACKUP_DIR="/backup"
 DATE=$(date +\%Y-\%m-\%d_\%H-\%M-\%S)

@@ -23,21 +23,19 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Create a directory for the backup scripts and backups
 RUN mkdir -p /backup
 
-# Copy the backup script to the container
+# Copy the scripts to the container
 COPY ./backup_pg.sh /usr/local/bin/backup_pg.sh
+COPY ./run_with_env.sh /usr/local/bin/run_with_env.sh
 
 # Set permissions for the backup script
-RUN chmod +x /usr/local/bin/backup_pg.sh
-
-# add the env vars to cron
-RUN echo "PGUSER=$PGUSER PGDATABASE=$PGDATABASE PGPASSWORD=$PGPASSWORD PGHOST=$PGHOST" | crontab -
+RUN chmod +x /usr/local/bin/backup_pg.sh /usr/local/bin/run_with_env.sh
 
 # Set up a cron job to run the backup script daily at 2 AM
 # RUN echo "0 2 * * * /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" | crontab -
 RUN echo "* * * * * /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" | crontab -
 
-# run the script once to create the initial backup
-# RUN /usr/local/bin/backup_pg.sh
+# Make sure cron can read the crontab file
+RUN chmod 600 /var/spool/cron/crontabs/root
 
-# Start cron in the foreground
-CMD ["cron", "-f"]
+# Start the wrapper script that sets up the environment for cron
+CMD ["/usr/local/bin/run_with_env.sh"]
