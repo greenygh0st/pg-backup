@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# export variables for pg_dump
-export PGUSER=your_db_user
-export PGDATABASE=your_database_name
-export PGPASSWORD=your_db_password
-export PGHOST=your_db_host
-
 # Define backup directory and filename with timestamp
 BACKUP_DIR="/backup"
 DATE=$(date +\%Y-\%m-\%d_\%H-\%M-\%S)
