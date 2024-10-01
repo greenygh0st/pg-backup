@@ -31,7 +31,10 @@ RUN chmod +x /usr/local/bin/backup_pg.sh
 
 # Set up a cron job to run the backup script daily at 2 AM
 # RUN echo "0 2 * * * /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" | crontab -
-RUN echo "* * * * * /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" | crontab -
+
+# Set up the cron job with environment variables
+RUN echo "PGUSER=$PGUSER PGDATABASE=$PGDATABASE PGPASSWORD=$PGPASSWORD PGHOST=$PGHOST" >> /etc/crontabs/root && \
+    echo "* * * * * /usr/local/bin/backup_pg.sh > /var/log/backup_pg.log 2>&1" | crontab -
 
 # run the script once to create the initial backup
 # RUN /usr/local/bin/backup_pg.sh
