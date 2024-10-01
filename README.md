@@ -18,15 +18,15 @@ docker run -d --name pg-backup \
 ```
 
 ## Environment Variables
-- `PGUSER` - The user to connect to the database as
-- `PGPASSWORD` - The password for the user
-- `PGDATABASE` - The name of the database to backup
-- `PGHOST` - The host of the database
+- `PGUSER` - The user to connect to the database as.
+- `PGPASSWORD` - The password for the user.
+- `PGDATABASE` - The name of the database to backup.
+- `PGHOST` - The host of the database.
 - `KEEPBACKUP` - The number of days to keep backups for (default is '7'). Set to '0' to keep all backups.
-- `CRONTIME` - The time to run the backup (default is '0 2 * * *'/2AM)
+- `CRONTIME` - The time to run the backup (default is '0 2 * * *'/2AM).
 
 ## Volumes
-- `/backup` - The location where the backups will be stored in the container
+- `/backup` - The location where the backups will be stored in the container.
 
 ## Backup Daemon
 The backup daemon is a simple bash script that runs every 24 hours. It will create a backup of the database and store it in the `/backup` volume. The backups are stored in the format `dbname_backup_YYYY-MM-DD_HH-MM.sql`.
