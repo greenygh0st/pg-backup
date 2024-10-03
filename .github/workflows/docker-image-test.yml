@@ -52,6 +52,9 @@ jobs:
       - name: Set CRONTIME
         run: echo "CRONTIME='* * * * *'" >> $GITHUB_ENV
 
+      - name: Make backup mount point
+        run: mkdir /mnt/backup
+
       - name: Start Cron Job
         run: |
           echo "Setting up cron job..."
@@ -62,16 +65,17 @@ jobs:
             -e PGPASSWORD=your_db_password \
             -e PGHOST=localhost \
             -e CRONTIME="${CRONTIME}" \
+            -v /mnt/backup:/backup \
             pg_backup_image
 
           echo "Waiting 2 minutes for cron job to run..."
-          sleep 120  # Wait for 2 minutes to allow the cron job to execute
+          sleep 90  # Wait for 90 seconds to allow the cron job to execute
 
       - name: Verify Backup
         run: |
           echo "Verifying backup..."
-          # Check if the backup file exists
-          BACKUP_FILE=$(docker run --rm pg_backup_image ls /backup | head -n 1)
+          # Check if the backup file exists (old ref docker run --rm pg_backup_image)
+          BACKUP_FILE=$(ls /mnt/backup | head -n 1)
           echo "Found backup file: $BACKUP_FILE"  # Log the found file name
           if [ -z "$BACKUP_FILE" ]; then
             echo "No backup file found!"
