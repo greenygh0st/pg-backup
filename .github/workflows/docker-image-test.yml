@@ -71,6 +71,11 @@ jobs:
           echo "Waiting 2 minutes for cron job to run..."
           sleep 90  # Wait for 90 seconds to allow the cron job to execute
 
+      # see if there is anything in the backup directory
+      - name: Check for Backups
+        run: |
+          ls ~/backup
+      
       - name: Verify Backup
         run: |
           echo "Verifying backup..."
