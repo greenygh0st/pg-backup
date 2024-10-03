@@ -65,7 +65,7 @@ jobs:
             -e PGPASSWORD=your_db_password \
             -e PGHOST=localhost \
             -e CRONTIME="${CRONTIME}" \
-            -v /mnt/backup:/backup \
+            -v ~/backup:/backup \
             pg_backup_image
 
           echo "Waiting 2 minutes for cron job to run..."
