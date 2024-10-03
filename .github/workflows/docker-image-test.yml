@@ -1,4 +1,4 @@
-name: Test Backup Script
+name: Test Backup
 
 on:
   push:
@@ -53,7 +53,7 @@ jobs:
         run: echo "CRONTIME='* * * * *'" >> $GITHUB_ENV
 
       - name: Make backup mount point
-        run: mkdir /mnt/backup
+        run: mkdir ~/backup
 
       - name: Start Cron Job
         run: |
@@ -75,7 +75,7 @@ jobs:
         run: |
           echo "Verifying backup..."
           # Check if the backup file exists (old ref docker run --rm pg_backup_image)
-          BACKUP_FILE=$(ls /mnt/backup | head -n 1)
+          BACKUP_FILE=$(ls ~/backup | head -n 1)
           echo "Found backup file: $BACKUP_FILE"  # Log the found file name
           if [ -z "$BACKUP_FILE" ]; then
             echo "No backup file found!"
